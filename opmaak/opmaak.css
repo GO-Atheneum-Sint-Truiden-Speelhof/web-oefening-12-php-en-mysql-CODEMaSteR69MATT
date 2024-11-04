@@ -56,3 +56,21 @@ nav {
 label {
 	text-align: right;
 }
+/* Layout setup for both sections */
+form {
+    width: 100%;
+}
+
+/* Left section styles */
+.left-section {
+    float: left;
+    width: 45%; /* Adjust this to your needs */
+}
+
+/* Right section styles */
+.right-section {
+    float: right;
+    width: 45%; /* Adjust this to your needs */
+    margin-right: 20px; /* Optional margin to the right */
+}
+
