@@ -46,11 +46,11 @@ function sql() {
     $dbname = "test";
 
     // Verbinding maken met de database
-    $com = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
     // Controleer verbinding
-    if ($com->connect_error) {
-        die("Connection failed: " . $com->connect_error);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
     // SQL-query
@@ -62,13 +62,13 @@ function sql() {
     echo $sql; // Voor debuggen
 
     // Voer query uit
-    if ($com->query($sql) === TRUE) {
+    if ($conn->query($sql) === TRUE) {
         echo "Nieuwe record is aangemaakt.";
     } else {
-        echo "Fout: " . $sql . "<br>" . $com->error;
+        echo "Fout: " . $sql . "<br>" . $conn->error;
     }
 
     // Verbinding sluiten
-    $com->close();
+    $conn->close();
 }
 ?>

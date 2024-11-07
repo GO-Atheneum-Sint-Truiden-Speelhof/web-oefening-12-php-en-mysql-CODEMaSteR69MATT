@@ -1,54 +1,58 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Database connection details
+function checkLoginAndFetchMatch() {
     $servername = "localhost";
     $username = "matt";
-    $password = "123"; // Replace with the actual password
+    $password = "123";
     $dbname = "test";
 
-    // Create a new database connection
-    $com = new mysqli($servername, $username, $password, $dbname);
+    // Verbinding maken met de database
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Check connection
-    if ($com->connect_error) {
-        die("Verbinding mislukt: " . $com->connect_error);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
-    // Get user input
-    $gebruikersnaam = $_POST['gebruikersnaam'];
-    $wachtwoord = $_POST['wachtwoord'];
+    // Sanitize user input to prevent SQL injection
+    $gebruikersnaam = $conn->real_escape_string($_POST['gebruikersnaam']);
+    $wachtwoord = $conn->real_escape_string($_POST['wachtwoord']);
 
-    // Hash the password for security
-    $hashed_wachtwoord = password_hash($wachtwoord, PASSWORD_DEFAULT);
+    // Check if the login exists
+    $sql = "SELECT * FROM gebruikersnaam WHERE gebruikersnaam = '$gebruikersnaam' AND wachtwoord = '$wachtwoord'";
+    $result = $conn->query($sql);
 
-    // SQL query to insert the data
-    $sql = "INSERT INTO gebruikers (gebruikersnaam, wachtwoord) VALUES (?, ?)";
-    $stmt = $com->prepare($sql);
+    if ($result->num_rows > 0) {
+        // Login is correct, fetch and display all data from the wedstrijd table
+        $wedstrijdSql = "SELECT * FROM wedstrijd";
+        $wedstrijdResult = $conn->query($wedstrijdSql);
 
-    if ($stmt) {
-        $stmt->bind_param("ss", $gebruikersnaam, $hashed_wachtwoord);
-
-        // Execute and check if the insertion was successful
-        if ($stmt->execute()) {
-            echo "Gebruiker succesvol toegevoegd!";
+        if ($wedstrijdResult->num_rows > 0) {
+            // Display all columns from each row in the wedstrijd table
+            while ($row = $wedstrijdResult->fetch_assoc()) {
+                foreach ($row as $columnName => $columnValue) {
+                    echo ucfirst($columnName) . ": " . (isset($columnValue) ? $columnValue : 'Geen data beschikbaar') . "<br>";
+                }
+                echo "<hr>";
+            }
         } else {
-            echo "Fout bij toevoegen gebruiker: " . $stmt->error;
+            echo "Geen wedstrijdgegevens gevonden.";
         }
-
-        // Close statement
-        $stmt->close();
     } else {
-        echo "Fout bij het voorbereiden van de statement: " . $com->error;
+        echo "Onjuiste gebruikersnaam of wachtwoord.";
     }
 
-    // Close connection
-    $com->close();
+    // Verbinding sluiten
+    $conn->close();
+}
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    checkLoginAndFetchMatch();
 }
 ?>
 
-<!-- HTML Form for user registration -->
+<!-- HTML Form for user login -->
 <form method="POST" action="">
     Gebruikersnaam: <input type="text" name="gebruikersnaam" required><br>
     Wachtwoord: <input type="password" name="wachtwoord" required><br>
-    <input type="submit" value="Registreer">
+    <input type="submit" value="Login">
 </form>
