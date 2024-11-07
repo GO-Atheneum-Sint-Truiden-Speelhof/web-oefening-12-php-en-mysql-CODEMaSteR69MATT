@@ -26,18 +26,28 @@ function checkLoginAndFetchMatch() {
         $wedstrijdResult = $conn->query($wedstrijdSql);
 
         if ($wedstrijdResult->num_rows > 0) {
-            // Display all columns from each row in the wedstrijd table
+            echo '<div class="wedstrijd-grid">';
+
             while ($row = $wedstrijdResult->fetch_assoc()) {
+                echo '<div class="wedstrijd-card">';
+                echo '<h2>Wedstrijd Details</h2>';
+                echo '<div class="wedstrijd-details">';
                 foreach ($row as $columnName => $columnValue) {
-                    echo ucfirst($columnName) . ": " . (isset($columnValue) ? $columnValue : 'Geen data beschikbaar') . "<br>";
+                    echo '<div class="detail-item">';
+                    echo '<span class="detail-label">' . ucfirst($columnName) . ':</span> ';
+                    echo '<span class="detail-value">' . (isset($columnValue) ? htmlspecialchars($columnValue) : 'Geen data beschikbaar') . '</span>';
+                    echo '</div>';
                 }
-                echo "<hr>";
+                echo '</div>';
+                echo '</div>';
             }
+
+            echo '</div>';
         } else {
-            echo "Geen wedstrijdgegevens gevonden.";
+            echo "<p class='message'>Geen wedstrijdgegevens gevonden.</p>";
         }
     } else {
-        echo "Onjuiste gebruikersnaam of wachtwoord.";
+        echo "<p class='message'>Onjuiste gebruikersnaam of wachtwoord.</p>";
     }
 
     // Verbinding sluiten
@@ -52,7 +62,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- HTML Form for user login -->
 <form method="POST" action="">
-    Gebruikersnaam: <input type="text" name="gebruikersnaam" required><br>
-    Wachtwoord: <input type="password" name="wachtwoord" required><br>
+    <label for="gebruikersnaam">Gebruikersnaam:</label>
+    <input type="text" id="gebruikersnaam" name="gebruikersnaam" required><br>
+    <label for="wachtwoord">Wachtwoord:</label>
+    <input type="password" id="wachtwoord" name="wachtwoord" required><br>
     <input type="submit" value="Login">
 </form>
+
+<!-- CSS for styling -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f0f4f8;
+    }
+    .wedstrijd-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .wedstrijd-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border: 1px solid #ddd;
+    }
+    .wedstrijd-card h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #007BFF;
+        padding-bottom: 5px;
+    }
+    .wedstrijd-details .detail-item {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .detail-label {
+        font-weight: bold;
+        color: #555;
+    }
+    .detail-value {
+        color: #333;
+    }
+    .message {
+        color: #d9534f;
+        font-weight: bold;
+    }
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: auto;
+    }
+    form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    form input[type="text"], form input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    form input[type="submit"] {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    form input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
