@@ -36,9 +36,6 @@ if (mail($ontvanger, $onderwerp, $bericht, $verzender)) {
     echo "E-mail verzenden is mislukt.";
 }
 
-// Database invoegen
-sql();
-
 function sql() {
     $servername = "localhost";
     $username = "matt";
