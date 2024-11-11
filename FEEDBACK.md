@@ -13,7 +13,6 @@
 
 
 ## Algemene feedback ##
-* confirm.php en mail.php: Je leest de gegevens in in beide bestanden en stuur telkens (2x dus) een mail. ( -1 )
 * login.php (19 - 20): input escapen tegen SQL-injectie. Waar heb je die info gevonden? ( + 1 )
 * login.php (32): Werkt, maar niet echt proper om zo maar een function te stoppen. Je kan dit oplossen met een proper if-statement. ( -1 )
 * login.php (82): Het 'endif' statement is verouderd sinds php 4.0.0. Dus niet meer gebruiken! We gebruiken accolades { } om codeblokken te onderscheiden. ( - 1 )
@@ -25,4 +24,4 @@ Je maakte een mooie versie van de gevraagde website. Dit was geen eenvoudige oef
 Terwijl er zeker nog werk is aan het proper programmeren en het goed structureren van je programma-code is dit een goed resultaat.
 Probeer voor volgende oefeningen je code goed te scheiden afhankelijk van de functionaliteit, en geen talen door elkaar te schrijven. HTML, CSS, JavaScript, PHP horen zoveel mogelijk in hun eigen bestanden te staan.
 
-Je haalde uiteindelijk een score van __24 / 35__
+Je haalde uiteindelijk een score van __25 / 35__
